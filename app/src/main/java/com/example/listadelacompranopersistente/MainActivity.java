@@ -1,5 +1,6 @@
 package com.example.listadelacompranopersistente;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -54,9 +56,29 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                listaCompra.remove(i);
-                //Modificar el cambio
-                adaptador.notifyDataSetChanged();
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("Desea borrar el elemento seleccionado")
+                        .setPositiveButton("SI, eliminalo", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // START THE GAME!
+                                listaCompra.remove(i);
+                                //Modificar el cambio
+                                adaptador.notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User cancels the dialog.
+                                Toast.makeText(MainActivity.this, "No se borrará el elemento seleccionado", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                // Create the AlertDialog object and return it.
+                builder.create();
+                //Para mostrar el cuadro de dialogo
+                builder.show();
+
+
+
                 return true;
             }
         });
